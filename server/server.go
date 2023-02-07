@@ -2,9 +2,12 @@ package server
 
 import (
 	"atom/pkg"
+	"atom/pkg/exel"
 	"atom/pkg/parser"
 	"fmt"
 	"log"
+	"strconv"
+	"strings"
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -25,18 +28,34 @@ func Server() {
 
 	updates := bot.GetUpdatesChan(u)
 
-	go task()
+	// go task()
 	for update := range updates {
 		if update.Message != nil { // If we got a message
-			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+			// log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
 			reply := Reply(update.Message.Text)
 			if reply == "False" {
 				reply = update.Message.Text
 			}
+			// mass := make([]string, 0)
+			sps := strings.Split(reply, "\n")
+
+			if len(sps) == 5 {
+				stringToTrim := strings.TrimSpace(sps[3])
+				stringToTrim1 := strings.TrimSpace(sps[4])
+				s1, _ := strconv.Atoi(stringToTrim)
+				fmt.Println(len(stringToTrim))
+				s2, _ := strconv.Atoi(stringToTrim1)
+				fmt.Println(len(sps[4]))
+				exel.ChangeExel(sps[0], sps[1], sps[2], s1, s2)
+				file := tgbotapi.NewDocument(update.Message.From.ID, tgbotapi.FilePath("schet.xlsx"))
+				file.ReplyToMessageID = update.Message.MessageID
+				reply = "ГОТОВО"
+				bot.Send(file)
+
+			}
 
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, reply)
-			msg.ReplyToMessageID = update.Message.MessageID
 
 			bot.Send(msg)
 		}
@@ -44,6 +63,18 @@ func Server() {
 }
 
 func Reply(s string) string {
+	switch s {
+	case "/s":
+		return `
+		Отправьте 
+		1. КОД НАЗНАЧЕНИЯ ПЛАТЕЖА
+		2. БИН И АДРЕC В ФОРМАТЕ-->(БИН/ИИН 230440042123,ТОО Рон-41,г.Астана, пр.Мангилик Ел11)
+		3. НАИМЕНОВАНИЕ ТОВАРА
+		4. КОЛИЧЕСТВО
+		5.СУММА
+		`
+	}
+
 	if s == pkg.Item {
 		return parser.JoomTovar() + "\n" + parser.KaspiTovar()
 	}
