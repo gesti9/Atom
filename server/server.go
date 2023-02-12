@@ -2,6 +2,7 @@ package server
 
 import (
 	"atom/pkg"
+	"atom/pkg/checkport"
 	"atom/pkg/exel"
 	"atom/pkg/parser"
 	"fmt"
@@ -73,6 +74,14 @@ func Reply(s string) string {
 		4. КОЛИЧЕСТВО
 		5.СУММА
 		`
+	case "/7":
+		o8000, p8000, err := checkport.Shellout("nc -vnz 176.110.125.109 8000")
+		o8008, p8008, err := checkport.Shellout("nc -vnz 176.110.125.109 8008")
+		o5821, p5821, err := checkport.Shellout("nc -vnzu 176.110.125.109 5821")
+		if err != nil {
+			log.Printf("error: %v\n", err)
+		}
+		return o5821 + "\n" + p5821 + "\n" + o8000 + "\n" + p8000 + "\n" + o8008 + "\n" + p8008
 	}
 
 	if s == pkg.Item {
