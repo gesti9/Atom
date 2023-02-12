@@ -74,6 +74,28 @@ func Reply(s string) string {
 		4. КОЛИЧЕСТВО
 		5.СУММА
 		`
+	case "/2":
+		o8000, p8000, err := checkport.Shellout("nc -vnz 188.130.130.88 8000")
+		o8001, p8001, err := checkport.Shellout("nc -vnz 188.130.130.88 8001")
+		o8002, p8002, err := checkport.Shellout("nc -vnz 188.130.130.88 8002")
+		o8003, p8003, err := checkport.Shellout("nc -vnz 188.130.130.88 8003")
+		o5656, p5656, err := checkport.Shellout("nc -vnz 188.130.130.88 5656")
+
+		return o8000 + p8000 + o8001 + p8001 + o8002 + p8002 + o8003 + p8003 + o5656 + p5656
+	case "/3":
+		o8000, p8000, err := checkport.Shellout("nc -vnz 178.89.108.250 8000")
+		o8001, p8001, err := checkport.Shellout("nc -vnz 178.89.108.250 8001")
+		o8002, p8002, err := checkport.Shellout("nc -vnz 178.89.108.250 8002")
+		o8003, p8003, err := checkport.Shellout("nc -vnz 178.89.108.250 8003")
+		o8005, p8005, err := checkport.Shellout("nc -vnz 178.89.108.250 8005")
+		o5657, p5657, err := checkport.Shellout("nc -vnzu 178.89.108.250 5657")
+		return o8000 + p8000 + o8001 + p8001 + o8002 + p8002 + o8003 + p8003 + o8005 + p8005 + o5657 + p5657
+	case "/4":
+		o8001, p8001, err := checkport.Shellout("nc -vnz 85.159.27.8 8001")
+		o8002, p8002, err := checkport.Shellout("nc -vnz 85.159.27.8 8002")
+		o8003, p8003, err := checkport.Shellout("nc -vnz 85.159.27.8 8003")
+		o5715, p5715, err := checkport.Shellout("nc -vnz 85.159.27.8 5715")
+		return o8001 + p8001 + o8002 + p8002 + o8003 + p8003 + p5715 + o5715
 	case "/7":
 		o8000, p8000, err := checkport.Shellout("nc -vnz 176.110.125.109 8000")
 		o8008, p8008, err := checkport.Shellout("nc -vnz 176.110.125.109 8008")
