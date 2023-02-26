@@ -47,7 +47,7 @@ func KaspiTovar() string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	linkAll := doc.Find(".uk-width-expand").Find(".item-card__prices-price")
+	linkAll := doc.Find(".item-card__debet ").Find(".item-card__prices-price")
 	productName := doc.Find(".item-card__name")
 	name, _ := productName.Html()
 
@@ -75,12 +75,13 @@ func LegalAvto() string {
 		log.Fatal(err)
 	}
 	for i := 0; i < len(visit(nil, doc)); i++ {
-		matched, err := regexp.MatchString(`rubl`, visit(nil, doc)[i])
+		matched, err := regexp.MatchString(`legalizaciya`, visit(nil, doc)[i])
+		matched1, err := regexp.MatchString(`legalizacii`, visit(nil, doc)[i])
 		if err != nil {
 			log.Fatal(err)
 		}
 		// fmt.Println(matched) // true
-		if matched {
+		if matched || matched1 {
 			if result == visit(nil, doc)[i] {
 
 			} else {

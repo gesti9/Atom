@@ -114,6 +114,8 @@ func Reply(s string) string {
 			log.Printf("error: %v\n", err)
 		}
 		return o5821 + "\n" + p5821 + "\n" + o8000 + "\n" + p8000 + "\n" + o8008 + "\n" + p8008
+	case "/c":
+		return parser.JoomTovar() + "\n" + parser.KaspiTovar()
 	}
 
 	if s == pkg.Item {
@@ -126,7 +128,9 @@ func task() {
 	for {
 		c := New(pkg.BOT_TOKEN)
 		send := c.SendMessage(parser.LegalAvto(), int64(452639799))
+		// send1 := c.SendMessage(parser.LegalAvto(), int64(-881390644))
 		fmt.Println(send)
+		// fmt.Println(send1)
 		time.Sleep(time.Hour)
 	}
 
