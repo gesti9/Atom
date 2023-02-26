@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"regexp"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	"golang.org/x/net/html"
 )
 
 func JoomTovar() string {
@@ -45,7 +47,7 @@ func KaspiTovar() string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	linkAll := doc.Find(".item-card__debet ").Find(".item-card__prices-price")
+	linkAll := doc.Find(".uk-width-expand").Find(".item-card__prices-price")
 	productName := doc.Find(".item-card__name")
 	name, _ := productName.Html()
 
@@ -55,4 +57,56 @@ func KaspiTovar() string {
 	fmt.Println(name, price)
 	return name + price
 
+}
+
+func LegalAvto() string {
+	var result string
+	url := "https://informburo.kz/novosti"
+	res, err := http.Get(url)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
+		log.Fatalf("status code error:  %d %s", res.StatusCode, res.Status)
+	}
+	doc, err := html.Parse(res.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for i := 0; i < len(visit(nil, doc)); i++ {
+		matched, err := regexp.MatchString(`rubl`, visit(nil, doc)[i])
+		if err != nil {
+			log.Fatal(err)
+		}
+		// fmt.Println(matched) // true
+		if matched {
+			if result == visit(nil, doc)[i] {
+
+			} else {
+				result = visit(nil, doc)[i]
+				fmt.Println(result)
+
+			}
+
+		}
+
+	}
+	return result
+}
+
+func visit(links []string, n *html.Node) []string {
+	if n.Type == html.ElementNode && n.Data == "a" {
+		for _, a := range n.Attr {
+			if a.Key == "href" {
+				links = append(links, a.Val)
+			}
+		}
+	}
+
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		links = visit(links, c)
+	}
+
+	return links
 }

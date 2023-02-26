@@ -30,7 +30,7 @@ func Server() {
 
 	updates := bot.GetUpdatesChan(u)
 
-	// go task()
+	go task()
 
 	for update := range updates {
 		if update.Message != nil { // If we got a message
@@ -125,9 +125,9 @@ func Reply(s string) string {
 func task() {
 	for {
 		c := New(pkg.BOT_TOKEN)
-		send := c.SendMessage("*Доброе утро*", int64(452639799))
+		send := c.SendMessage(parser.LegalAvto(), int64(452639799))
 		fmt.Println(send)
-		time.Sleep(time.Minute)
+		time.Sleep(time.Hour)
 	}
 
 }
