@@ -11,6 +11,22 @@ import (
 	"golang.org/x/net/html"
 )
 
+func visit(links []string, n *html.Node) []string {
+	if n.Type == html.ElementNode && n.Data == "a" {
+		for _, a := range n.Attr {
+			if a.Key == "href" {
+				links = append(links, a.Val)
+			}
+		}
+	}
+
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		links = visit(links, c)
+	}
+
+	return links
+}
+
 func JoomTovar() string {
 	url := "https://www.joom.com/ru/products/62f661838ed09b01ebd4e0e2"
 	res, err := http.Get(url)
@@ -94,20 +110,4 @@ func LegalAvto() string {
 
 	}
 	return result
-}
-
-func visit(links []string, n *html.Node) []string {
-	if n.Type == html.ElementNode && n.Data == "a" {
-		for _, a := range n.Attr {
-			if a.Key == "href" {
-				links = append(links, a.Val)
-			}
-		}
-	}
-
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		links = visit(links, c)
-	}
-
-	return links
 }

@@ -31,6 +31,7 @@ func Server() {
 	updates := bot.GetUpdatesChan(u)
 
 	go task()
+	go OlxCheck()
 
 	for update := range updates {
 		if update.Message != nil { // If we got a message
@@ -134,4 +135,12 @@ func task() {
 		time.Sleep(time.Hour)
 	}
 
+}
+
+func OlxCheck() {
+
+	for {
+		OlxParser()
+		time.Sleep(time.Hour)
+	}
 }

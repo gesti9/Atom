@@ -1,10 +1,9 @@
 package main
 
-import (
-	"atom/server"
-)
+import "atom/server"
 
 func main() {
+
 	server.Server()
-	// parser.LegalAvto()
+
 }
